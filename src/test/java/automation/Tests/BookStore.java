@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 
+import automation.PageObjects.BookSelectionPage;
 import automation.PageObjects.LandingPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
@@ -30,29 +31,12 @@ public class BookStore {
 		
 		LandingPage landingPage = new LandingPage(driver);
 		
+		BookSelectionPage bookSelection = new BookSelectionPage(driver);
+		
 		//1. Open URL
 		landingPage.goTo();
 		
-		//2. Clicks the books drop down menu
-		driver.findElement(By.xpath("//a[normalize-space()='Book']")).click();
-		
-
-		//3. In the list appearing move the mouse pointer over fiction for the subcategories to appear
-		WebElement fictionElement = driver.findElement(By.xpath("//ul[@class='list-unstyled maincategory dropdown']//a[@onclick='getSearchResult()'][normalize-space()='Fiction']"));  
-		
-        Actions actions = new Actions(driver);
-        
-        actions.moveToElement(fictionElement).perform();
-
-        Thread.sleep(2000);  
-
-        //4.Click on the subcategory historical fiction
-        WebElement historicalFictionElement = driver.findElement(By.xpath("//ul[@class='list-unstyled booksubcategory']//a[normalize-space()='Historical fiction']"));  // Replace with the actual XPath
-
-        historicalFictionElement.click();
-        
-        
-        Thread.sleep(3000);
+		bookSelection.fictionalBookSelection();
         
         //5. On the result appearing sort the result using option A-Z
         
@@ -95,27 +79,19 @@ public class BookStore {
         
         driver.findElement(By.xpath("//ul[@class='list-inline m-0 signreflink position-relative']//li[@class='list-inline-item position-relative']//a")).click();
         
-        Thread.sleep(5000);
-        
-        
-        //7. Navgate to the cart and verify whether the book has been added and the title and price is same which is fetch from the previous page
-
-
-
-        Thread.sleep(2000);  
+        //7. Navigate to the cart and verify whether the book has been added and the title and price is same which is fetch from the previous page
 
         // Locate the book name and price in the cart
         WebElement cartBookName = driver.findElement(By.xpath("//label[@id='ctl00_phBody_BookCart_lvCart_ctrl0_lblProductTitle']"));
         WebElement cartBookPrice = driver.findElement(By.xpath("//label[@id='ctl00_phBody_BookCart_lvCart_ctrl0_lblActualPrice']"));  
 
-        // Verify the book name
         if (cartBookName.getText().equals(bookName)) {
             System.out.println("Verification Passed: The book name in the cart matches the expected name.");
         } else {
             System.out.println("Verification Failed: The book name in the cart does not match the expected name.");
         }
 
-        // Verify the book price
+
         if (cartBookPrice.getText().equals(bookPrice)) {
             System.out.println("Verification Passed: The book price in the cart matches the expected price.");
         } else {
